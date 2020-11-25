@@ -28,7 +28,7 @@ RUN npm ci
 EXPOSE 3000
 
 # start app
-CMD ["npm", "run", "deploy"]
+CMD ["npm", "start"]
 
 # debug
 #CMD ["/bin/sh", "busy.sh"]
