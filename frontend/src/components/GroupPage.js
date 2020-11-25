@@ -12,6 +12,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 
 const { default: Axios } = require("axios");
+const { REACT_APP_API_SERVER } = process.env;
 
 const drawerWidth = 240;
 const myStyles = makeStyles((theme) => ({
@@ -48,7 +49,8 @@ export function GroupPage() {
 
   async function getGroups(patientId) {
     //console.log("--------------- patient:", patientId, " ----------------------");
-    const qry = `http://localhost:8080/api/category`;
+    const qry = (typeof REACT_APP_API_SERVER == "undefined")?"http://localhost:8080/api/category":
+          `${REACT_APP_API_SERVER}/api/category`
 
     let response = await fetch(qry);
     let data = await response.json();
@@ -65,7 +67,8 @@ export function GroupPage() {
 
   async function getMyGroups(userId) {
     //console.log("--------------- patient:", patientId, " ----------------------");
-    const qry = `http://localhost:8080/api/user-profile/${userId}`;
+    const qry = (typeof REACT_APP_API_SERVER == "undefined")?`http://localhost:8080/api/user-profile/${userId}`:
+          `${REACT_APP_API_SERVER}/api/user-profile/${userId}`
 
     let response = await fetch(qry);
     let data = await response.json();
