@@ -15,4 +15,4 @@ EXPOSE 8080
 RUN adduser -D user
 USER user
 # https://stackoverflow.com/questions/44491257/how-to-reduce-spring-boot-memory-usage
-CMD [ "sh", "-c", "java -XX:+UseSerialGC -Xss512k -XX:MaxRAM=72m -Dserver.port=$PORT -jar app.jar" ]
+CMD [ "sh", "-c", "java -XX:+UseSerialGC -Xss512k -XX:MaxRAM=500m -Dserver.port=$PORT -jar app.jar" ]
