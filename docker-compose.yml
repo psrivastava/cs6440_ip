@@ -1,0 +1,20 @@
+version: "3"
+services:
+
+  backend:
+    build: backend/
+    image: "borenomore/backend:v1"
+    container_name: "backend"
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: frontend/.
+      dockerfile: "Dockerfile"
+      #image: "borenomore/frontend:v1"
+    container_name: "frontend"
+    ports:
+      - "80:3000"
+    depends_on:
+      - backend
