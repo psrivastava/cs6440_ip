@@ -14,4 +14,5 @@ COPY --from=backend /backend/target/drugabuse-0.0.1-SNAPSHOT.jar ./app.jar
 EXPOSE 8080
 RUN adduser -D user
 USER user
-CMD [ "sh", "-c", "java -Dserver.port=$PORT -jar app.jar" ]
+# https://stackoverflow.com/questions/44491257/how-to-reduce-spring-boot-memory-usage
+CMD [ "sh", "-c", "java -XX:+UseSerialGC -Xss512k -XX:MaxRAM=72m -Dserver.port=$PORT -jar app.jar" ]
