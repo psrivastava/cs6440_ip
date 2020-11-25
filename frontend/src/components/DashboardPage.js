@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import LeftDrawer from './LeftDrawer';
 import Iframe from "react-iframe";
-import TableauReport from 'tableau-react-embed';
+//import TableauReport from 'tableau-react-embed';
 import Tableau from './Tableau';
 import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";

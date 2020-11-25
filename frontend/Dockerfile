@@ -8,18 +8,22 @@ RUN mkdir -p /frontend
 # set working directory
 WORKDIR /frontend
 
+# install git
+RUN apk update
+RUN apk add --no-cache git
+
 # add `/app/node_modules/.bin` to $PATH
-ENV PATH /frontend/node_modules/.bin:$PATH
+# ENV PATH /frontend/node_modules/.bin:$PATH
 
 # install app dependencies
-COPY frontend .
+COPY . .
 #COPY frontend/package-lock.json ./frontend
-RUN npm install --silent
+RUN npm ci
 #RUN npm audit fix --force
 #RUN npm install react-scripts@3.4.0 -g --silent
 
 # debug script
-COPY busy.sh .
+#COPY busy.sh .
 
 EXPOSE 3000
 
