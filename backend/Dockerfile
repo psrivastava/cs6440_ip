@@ -10,6 +10,15 @@ COPY . .
 RUN mvn clean verify
 
 FROM adoptopenjdk/openjdk11:jdk-11.0.6_10-alpine-slim
+
+# https://gist.github.com/wwerner/05a8e627e8f3ba18300db745511d3bcb
+# see https://devcenter.heroku.com/articles/exec#enabling-docker-support
+RUN apk add --no-cache curl bash openssh python
+ADD heroku-exec.sh /app/.profile.d/heroku-exec.sh
+RUN chmod a+x /app/.profile.d/heroku-exec.sh
+# ====================================================================
+
+
 COPY --from=backend /backend/target/drugabuse-0.0.1-SNAPSHOT.jar ./app.jar
 EXPOSE 8080
 RUN adduser -D user
