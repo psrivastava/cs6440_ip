@@ -9,14 +9,14 @@ RUN mkdir -p /frontend
 WORKDIR /frontend
 
 # install git
-RUN apk update
-RUN apk add --no-cache git
+#RUN apk update
+#RUN apk add --no-cache git
 
 # https://gist.github.com/wwerner/05a8e627e8f3ba18300db745511d3bcb
 # see https://devcenter.heroku.com/articles/exec#enabling-docker-support
-RUN apk add --no-cache curl bash openssh python
-ADD heroku-exec.sh /app/.profile.d/heroku-exec.sh
-RUN chmod a+x /app/.profile.d/heroku-exec.sh
+#RUN apk add --no-cache curl bash openssh python
+#ADD heroku-exec.sh /app/.profile.d/heroku-exec.sh
+#RUN chmod a+x /app/.profile.d/heroku-exec.sh
 # ====================================================================
 
 # add `/app/node_modules/.bin` to $PATH
@@ -26,6 +26,7 @@ RUN chmod a+x /app/.profile.d/heroku-exec.sh
 COPY . .
 #COPY frontend/package-lock.json ./frontend
 RUN npm ci
+RUN npm run build
 #RUN npm audit fix --force
 #RUN npm install react-scripts@3.4.0 -g --silent
 
