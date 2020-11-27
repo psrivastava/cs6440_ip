@@ -12,13 +12,13 @@ class Tableau extends Component {
     const vizContainer = this.vizContainer;
 
     var options = {
+      height: "2000px",
       width: "1200px",
-      height: "800px",
       hideTabs: true,
       hideToolbar: true,
     };
 
-    let viz = new tableau.Viz(vizContainer, vizUrl, options);
+    let viz = new window.tableau.Viz(vizContainer, vizUrl, options);
   }
 
   render() {

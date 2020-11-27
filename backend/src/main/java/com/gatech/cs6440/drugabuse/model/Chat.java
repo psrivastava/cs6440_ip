@@ -21,9 +21,9 @@ public class Chat {
     private Integer chatId;
     private String message;
 
-    @JsonIgnore
-    @ManyToOne(targetEntity = Category.class, cascade = CascadeType.ALL)
-    private Category category;
+    //@JsonIgnore
+    //@ManyToOne(targetEntity = Category.class, cascade = CascadeType.ALL)
+    private Integer category;
 
     public Chat() {
 
@@ -33,7 +33,7 @@ public class Chat {
     public String toString() {
         return "Chat{" +
                 "chatId=" + chatId +
-                ", groupName='" + category.getCategoryName() + '\'' +
+                ", groupName='" + category + '\'' +
                 ", message='" + message + '\'' +
                 '}';
     }

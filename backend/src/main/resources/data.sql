@@ -40,7 +40,7 @@ INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME,CATEGORY_DESC)
 insert into USER_CATEGORY(USER_ID,CATEGORY_ID)
  values(1,1);
  insert into USER_CATEGORY(USER_ID,CATEGORY_ID)
- values(1,2);
+ values(1,4);
  insert into USER_CATEGORY(USER_ID,CATEGORY_ID)
  values(23,4);
  insert into USER_CATEGORY(USER_ID,CATEGORY_ID)
@@ -48,3 +48,11 @@ insert into USER_CATEGORY(USER_ID,CATEGORY_ID)
  insert into USER_CATEGORY(USER_ID,CATEGORY_ID)
  values(34,10);
 
+insert into CHAT(CHAT_ID, CATEGORY, MESSAGE)
+ values (1, 1, 'Brandon<$>Hi guys !!');
+insert into CHAT(CHAT_ID, CATEGORY, MESSAGE)
+ values (2, 1, 'Brandon<$>so are we meeting finally');
+ insert into CHAT(CHAT_ID, CATEGORY, MESSAGE)
+ values (3, 1, 'Cicily<$>yes, we are');
+insert into CHAT(CHAT_ID, CATEGORY, MESSAGE)
+ values (4, 4, 'Alex<$>Hello everyone !!');

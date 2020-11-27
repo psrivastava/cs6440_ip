@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -28,6 +29,8 @@ public class APIController {
     UserProfileService userProfileService;
     @Autowired
     CategoryService categoryService;
+    @Autowired
+    ChatService chatService;
 
     // testing the API only
     @GetMapping("/date")
@@ -146,6 +149,24 @@ public class APIController {
         categoryService.save(category);
         logger.info("Success: SAVED");
         return category;
+    }
+
+    @GetMapping("/chat/{id}")
+    public List<Chat> getChats(@PathVariable int id) {
+        logger.info("Hitting Chat endpoint");
+
+        List<Chat> chats = new ArrayList<>();
+        chats = chatService.findAll();
+
+        return chats.stream().filter(c -> c.getCategory() == id).collect(Collectors.toList());
+    }
+
+    @PostMapping("/chat")
+    public Chat getChats(@RequestBody Chat newChat) {
+        logger.info("Hitting Cat to create a new category");
+        chatService.save(newChat);
+        logger.info("Success: SAVED");
+        return newChat;
     }
 
 }
