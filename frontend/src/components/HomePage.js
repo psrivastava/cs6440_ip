@@ -39,6 +39,13 @@ const myStyles = makeStyles((theme) => ({
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
+  paper: {
+    width: "100%",
+    textAlign: 'left',
+    justifyContent: 'center',
+    alignContent: 'center',
+    padding: '30px'
+  },
 }));
 
 const handleChange = () => {};
@@ -126,26 +133,26 @@ export default function HomePage() {
       <LeftDrawer />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h6" key="title" noWrap>
             My Profile
           </Typography>
         </Toolbar>
       </AppBar>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Grid container md spacing={2}>
+        <Grid container md spacing={2} key="maingrid">
           <Grid item md>
             <Paper className={classes.paper}>
               <Typography
                 className={classes.title}
                 color="textSecondary"
-                gutterBottom
+                gutterBottom key="mymedicines"
               >
                 My Medicines
               </Typography>
               <ul>
-                {medicines.map((m) => {
-                  return <li>{m}</li>;
+                {medicines.map((m, i) => {
+                  return <li key={i}>{m}</li>;
                 })}
               </ul>
             </Paper>
@@ -176,8 +183,8 @@ export default function HomePage() {
                 Vital Stats
               </Typography>
               <ul>
-                {vitStats.map((m) => {
-                  return <li>{m}</li>;
+                {vitStats.map((m, i) => {
+                  return <li key={i}>{m}</li>;
                 })}
               </ul>
             </Paper>

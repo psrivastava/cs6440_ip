@@ -33,6 +33,13 @@ const myStyles = makeStyles((theme) => ({
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
+  card: {
+    width: "100%",
+    textAlign: 'left',
+    justifyContent: 'center',
+    alignContent: 'center',
+    padding: '30px'
+  },
 }));
 
 const doSomething = async () => {};
@@ -41,10 +48,12 @@ export function GroupPage() {
   const classes = myStyles();
   const [groupNames, setGroupNames] = React.useState([]);
   const [myGroups, setMyGroups] = React.useState([]);
-  const [messages, setMessages] = React.useState([
+  const [messages, setMessages] = React.useState([]);
+  /*
     ["Me", "Hey man how are you doing"],
     ["Brandon", "I am giving it back"]
   ]);
+  */
   const [currentGroup, setCurrentGroup] = React.useState("1");
 
   async function getGroups(patientId) {
@@ -62,7 +71,13 @@ export function GroupPage() {
     let data_names = [];
 
     data.forEach((stat) => {
-      stat.checked = false;
+      if(myGroups.some(mg => mg.categoryId == stat.categoryId)){
+        console.log('checked ' + stat.categoryId);
+        stat.checked = true;
+      } else{
+        stat.checked = false;
+      }
+
       stat.name = `all-${stat.categoryId}`;
       data_names.push(stat);
     });
@@ -82,15 +97,18 @@ export function GroupPage() {
 
     if (typeof data == "undefined") return;
 
-    var data_names = [];
+    myGroups.length = 0;
 
     data.categories?.forEach((stat) => {
       stat.checked = true;
       stat.name = `my-${stat.categoryId}`;
-      data_names.push(stat);
+      myGroups.push(stat);
     });
 
-    setMyGroups(data_names);
+    setMyGroups(myGroups);
+
+    // load all and select mine
+    await getGroups();
   }
 
   const handleChangeAll = (idx, e) => {
@@ -99,8 +117,28 @@ export function GroupPage() {
     setGroupNames(groupNames);
   };
 
-  const handleChangeMy = (event) => {
-    setCurrentGroup(event.target.value.toString());
+  const handleChangeMy = async (event) => {
+    setCurrentGroup(event.target.value);
+
+    const categoryId = event.target.name.split('-')[1];
+
+    const qry =
+      typeof REACT_APP_API_SERVER == "undefined"
+        ? `http://localhost:8080/api/chat/${categoryId}`
+        : `${REACT_APP_API_SERVER}/api/chat/${categoryId}`;
+
+    let response = await fetch(qry);
+    let data = await response.json();
+
+    if (typeof data == "undefined") return;
+
+    var newchats = []
+    data.forEach((chat) => {
+
+      newchats.push(chat.message.split('<$>'));
+    });
+
+    setMessages(newchats);
   };
 
   const handleSend = (event) => {
@@ -114,7 +152,7 @@ export function GroupPage() {
   React.useEffect(() => {
     const patientId = localStorage.getItem("patientId");
     const userId = localStorage.getItem("userId");
-    getGroups();
+    //getGroups();
     getMyGroups(userId);
   }, []);
 
@@ -132,7 +170,7 @@ export function GroupPage() {
         <div className={classes.toolbar} />
         <Grid container spacing={2}>
           <Grid item md={4} sm={4}>
-            <Paper>
+            <Paper className={classes.card}>
               <Typography
                 className={classes.title}
                 color="textSecondary"
@@ -143,7 +181,7 @@ export function GroupPage() {
               <FormGroup column="true">
                 {groupNames.map((g, idx) => {
                   return (
-                    <FormControlLabel
+                    <FormControlLabel name="allgroups"
                       control={
                         <Checkbox
                           key={g.name}
@@ -161,7 +199,7 @@ export function GroupPage() {
             </Paper>
           </Grid>
           <Grid item md={4} sm={4}>
-            <Paper>
+            <Paper className={classes.card}>
               <FormControl component="fieldset">
                 <FormLabel component="legend">My Groups</FormLabel>
                 <RadioGroup
@@ -185,7 +223,7 @@ export function GroupPage() {
             </Paper>
           </Grid>
           <Grid item md={4} sm={4}>
-            <Paper>
+            <Paper className={classes.card}>
               <Typography
                 className={classes.title}
                 color="textSecondary"
