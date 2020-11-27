@@ -1,15 +1,17 @@
 import React from "react";
-import { makeStyles } from '@material-ui/core/styles';
-import LeftDrawer from './LeftDrawer';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { Grid, Paper } from '@material-ui/core';
+import { makeStyles } from "@material-ui/core/styles";
+import LeftDrawer from "./LeftDrawer";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
+import { Grid, Paper } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
 
 const { default: Axios } = require("axios");
 const { REACT_APP_API_SERVER } = process.env;
@@ -17,11 +19,11 @@ const { REACT_APP_API_SERVER } = process.env;
 const drawerWidth = 240;
 const myStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   content: {
     flexGrow: 1,
-    width: '1200px',
+    width: "1200px",
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing(2),
   },
@@ -33,32 +35,32 @@ const myStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
 }));
 
-const handleChange = () => {
-
-}
-
-const doSomething = async () => {
-}
+const doSomething = async () => {};
 
 export function GroupPage() {
-
   const classes = myStyles();
   const [groupNames, setGroupNames] = React.useState([]);
   const [myGroups, setMyGroups] = React.useState([]);
   const [chat, setChat] = React.useState([]);
+  const [currentGroup, setCurrentGroup] = React.useState("1");
 
   async function getGroups(patientId) {
     //console.log("--------------- patient:", patientId, " ----------------------");
-    const qry = (typeof REACT_APP_API_SERVER == "undefined")?"http://localhost:8080/api/category":
-          `${REACT_APP_API_SERVER}/api/category`
+    const qry =
+      typeof REACT_APP_API_SERVER == "undefined"
+        ? "http://localhost:8080/api/category"
+        : `${REACT_APP_API_SERVER}/api/category`;
 
     let response = await fetch(qry);
     let data = await response.json();
 
     if (typeof data == "undefined") return;
 
-    var data_names = [];
+    let data_names = [];
+
     data.forEach((stat) => {
+      stat.checked = false;
+      stat.name = `all-${stat.categoryId}`;
       data_names.push(stat);
     });
 
@@ -67,8 +69,10 @@ export function GroupPage() {
 
   async function getMyGroups(userId) {
     //console.log("--------------- patient:", patientId, " ----------------------");
-    const qry = (typeof REACT_APP_API_SERVER == "undefined")?`http://localhost:8080/api/user-profile/${userId}`:
-          `${REACT_APP_API_SERVER}/api/user-profile/${userId}`
+    const qry =
+      typeof REACT_APP_API_SERVER == "undefined"
+        ? `http://localhost:8080/api/user-profile/${userId}`
+        : `${REACT_APP_API_SERVER}/api/user-profile/${userId}`;
 
     let response = await fetch(qry);
     let data = await response.json();
@@ -76,12 +80,25 @@ export function GroupPage() {
     if (typeof data == "undefined") return;
 
     var data_names = [];
+
     data.categories?.forEach((stat) => {
+      stat.checked = true;
+      stat.name = `my-${stat.categoryId}`;
       data_names.push(stat);
     });
 
     setMyGroups(data_names);
   }
+
+  const handleChangeAll = (idx, e) => {
+    //e.preventDefault();
+    groupNames[idx].checked = !groupNames[idx].checked;
+    setGroupNames(groupNames);
+  };
+
+  const handleChangeMy = (event) => {
+    setCurrentGroup(event.target.value.toString());
+  };
 
   React.useEffect(() => {
     const patientId = localStorage.getItem("patientId");
@@ -102,49 +119,121 @@ export function GroupPage() {
       </AppBar>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-      <Grid container spacing={2}>
-        <Grid item md={4} sm={4}>
-          <Paper>
-            <FormGroup column>
-              {
-                groupNames.map((g) => {
-                  return <FormControlLabel
-                    control={
-                      <Checkbox checked="false" onChange={handleChange} name={g.categoryId} />
-                    }
-                    label={g.categoryName}
-                  />
+        <Grid container spacing={2}>
+          <Grid item md={4} sm={4}>
+            <Paper>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+                All groups
+              </Typography>
+              <FormGroup column>
+                {
+                groupNames.map((g, idx) => {
+                  return (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={g.checked}
+                          onChange={handleChangeAll.bind(this, idx)}
+                          name={g.name}
+                          color="primary"
+                        />
+                      }
+                      label={g.categoryName}
+                    />
+                  );
                 })
-              }
-            </FormGroup>
-          </Paper>
+                }
+              </FormGroup>
+            </Paper>
+          </Grid>
+          <Grid item md={4} sm={4}>
+            <Paper>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">My Groups</FormLabel>
+                <RadioGroup
+                  name="mygroups"
+                  value={currentGroup}
+                  onChange={handleChangeMy}
+                >
+                  {myGroups.map((g, idx) => {
+                    return (
+                      <FormControlLabel
+                        value={g.categoryId}
+                        control={<Radio />}
+                        label={g.categoryName}
+                        name={"my-" + g.categoryId}
+                      />
+                    );
+                  })}
+                </RadioGroup>
+              </FormControl>
+            </Paper>
+          </Grid>
+          <Grid item md={4} sm={4}>
+            <Paper>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+                Conversation
+              </Typography>
+              <ul>
+                <li>bp</li>
+                <li>weight</li>
+              </ul>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item md={4} sm={4}>
-          <Paper>
-            <FormGroup column>
-              {
-                myGroups.map((g) => {
-                  return <FormControlLabel
-                    control={
-                      <Checkbox checked="false" onChange={handleChange} name={g.categoryId} />
-                    }
-                    label={g.categoryName}
-                  />
-                })
-              }
-            </FormGroup>
-          </Paper>
-        </Grid>
-        <Grid item md={4} sm={4}>
-          <Paper>
-            <ul>
-              <li>bp</li>
-              <li>weight</li>
-            </ul>
-          </Paper>
-        </Grid>
-      </Grid>
       </main>
     </div>
   );
+
+  /*
+  const [value, setValue] = React.useState("female");
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  return (
+    <>
+    <Grid container spacing={2}>
+          <Grid item md={4} sm={4}>
+      <Paper>
+        <FormControl component="fieldset">
+          <FormLabel component="legend">Gender</FormLabel>
+          <RadioGroup
+            aria-label="gender"
+            name="gender1"
+            value={value}
+            onChange={handleChange}
+          >
+            <FormControlLabel
+              value="female"
+              control={<Radio />}
+              label="Female"
+            />
+            {myGroups.map((g, idx) => {
+                    return (
+                      <FormControlLabel
+                        value={g.categoryId}
+                        control={<Radio />}
+                        label={g.categoryName}
+                        name={"my-" + g.categoryId}
+                      />
+                    );
+                  })}
+          </RadioGroup>
+        </FormControl>
+      </Paper>
+      </Grid>
+      </Grid>
+    </>
+  );
+  */
 }

@@ -133,24 +133,23 @@ export default function HomePage() {
       </AppBar>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-      <Grid container md spacing={2}>
-        <Grid item md>
-          <Paper className={classes.paper}>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
-            >
-              My Medicines
-            </Typography>
-            <ul>
-              {medicines.map((m) => {
-                return <li>{m}</li>;
-              })}
-            </ul>
-          </Paper>
-        </Grid>
-        <Grid container direction="column" md spacing={1}>
+        <Grid container md spacing={2}>
+          <Grid item md>
+            <Paper className={classes.paper}>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+                My Medicines
+              </Typography>
+              <ul>
+                {medicines.map((m) => {
+                  return <li>{m}</li>;
+                })}
+              </ul>
+            </Paper>
+          </Grid>
           <Grid item>
             <Paper className={classes.paper}>
               <Typography
@@ -167,24 +166,23 @@ export default function HomePage() {
               </ul>
             </Paper>
           </Grid>
+          <Grid item md>
+            <Paper className={classes.paper}>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+                Vital Stats
+              </Typography>
+              <ul>
+                {vitStats.map((m) => {
+                  return <li>{m}</li>;
+                })}
+              </ul>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item md>
-          <Paper className={classes.paper}>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
-            >
-              Vital Stats
-            </Typography>
-            <ul>
-              {vitStats.map((m) => {
-                return <li>{m}</li>;
-              })}
-            </ul>
-          </Paper>
-        </Grid>
-      </Grid>
       </main>
     </div>
   );
