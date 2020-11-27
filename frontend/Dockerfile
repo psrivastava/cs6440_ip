@@ -33,7 +33,7 @@ RUN npm run build
 # debug script
 #COPY busy.sh .
 
-EXPOSE 3000
+EXPOSE 5000
 
 # start app
 CMD ["npm", "run", "deploy"]

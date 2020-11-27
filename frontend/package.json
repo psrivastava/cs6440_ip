@@ -20,7 +20,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "deploy": "REACT_APP_API_SERVER=https://cs6440-drugabuse-api.herokuapp.com PORT=3000 serve -s build",
+    "deploy": "REACT_APP_API_SERVER=https://cs6440-drugabuse-api.herokuapp.com serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
