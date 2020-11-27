@@ -41,7 +41,10 @@ export function GroupPage() {
   const classes = myStyles();
   const [groupNames, setGroupNames] = React.useState([]);
   const [myGroups, setMyGroups] = React.useState([]);
-  const [chat, setChat] = React.useState([]);
+  const [messages, setMessages] = React.useState([
+    ["Me", "Hey man how are you doing"],
+    ["Brandon", "I am giving it back"]
+  ]);
   const [currentGroup, setCurrentGroup] = React.useState("1");
 
   async function getGroups(patientId) {
@@ -100,6 +103,14 @@ export function GroupPage() {
     setCurrentGroup(event.target.value.toString());
   };
 
+  const handleSend = (event) => {
+
+  };
+
+  const Messages = props => props.data.map(m => m[0] !== '' ?
+(<li key={m[0]}><strong>{m[0]}</strong> : <div className="innermsg">{m[1]}</div></li>)
+: (<li key={m[1]} className="update">{m[1]}</li>) );
+
   React.useEffect(() => {
     const patientId = localStorage.getItem("patientId");
     const userId = localStorage.getItem("userId");
@@ -129,13 +140,13 @@ export function GroupPage() {
               >
                 All groups
               </Typography>
-              <FormGroup column>
-                {
-                groupNames.map((g, idx) => {
+              <FormGroup column="true">
+                {groupNames.map((g, idx) => {
                   return (
                     <FormControlLabel
                       control={
                         <Checkbox
+                          key={g.name}
                           checked={g.checked}
                           onChange={handleChangeAll.bind(this, idx)}
                           name={g.name}
@@ -145,8 +156,7 @@ export function GroupPage() {
                       label={g.categoryName}
                     />
                   );
-                })
-                }
+                })}
               </FormGroup>
             </Paper>
           </Grid>
@@ -162,6 +172,7 @@ export function GroupPage() {
                   {myGroups.map((g, idx) => {
                     return (
                       <FormControlLabel
+                        key={"my-" + g.categoryId}
                         value={g.categoryId}
                         control={<Radio />}
                         label={g.categoryName}
@@ -180,12 +191,23 @@ export function GroupPage() {
                 color="textSecondary"
                 gutterBottom
               >
-                Conversation
+                Chat
               </Typography>
-              <ul>
-                <li>bp</li>
-                <li>weight</li>
-              </ul>
+              <Messages data={messages} />
+              <div id="sendform">
+                <form
+                  onSubmit={(e) => handleSend(e)}
+                  style={{ display: "flex" }}
+                >
+                  <input
+                    id="m"
+                    //onChange={(e) => setInput(e.target.value.trim())}
+                  />
+                  <button style={{ width: "75px" }} type="submit">
+                    Send
+                  </button>
+                </form>
+              </div>
             </Paper>
           </Grid>
         </Grid>
