@@ -29,6 +29,7 @@ RUN npm ci
 RUN npm run build
 #RUN npm audit fix --force
 #RUN npm install react-scripts@3.4.0 -g --silent
+ENV REACT_APP_API_SERVER="https://cs6440-drugabuse-api.herokuapp.com"
 
 # debug script
 #COPY busy.sh .
