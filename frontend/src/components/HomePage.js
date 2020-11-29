@@ -43,8 +43,7 @@ const myStyles = makeStyles((theme) => ({
     width: "100%",
     textAlign: 'left',
     justifyContent: 'center',
-    alignContent: 'center',
-    padding: '30px'
+    alignContent: 'center'
   },
 }));
 
