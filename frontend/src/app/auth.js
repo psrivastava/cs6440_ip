@@ -12,8 +12,11 @@ export const fakeAuth = {
         return;
       }
 
+      /*
       const API_HOST = process.env.REACT_APP_API_SERVER || 'http://localhost:8080';
       const url = `${API_HOST}/login`;
+      */
+      const url = "https://cs6440-drugabuse-api.herokuapp.com/login";
       const auth = {
         username: email,
         password: pwd

@@ -58,11 +58,13 @@ export function GroupPage() {
 
   async function getGroups(patientId) {
     //console.log("--------------- patient:", patientId, " ----------------------");
+    /*
     const qry =
       typeof REACT_APP_API_SERVER == "undefined"
         ? "http://localhost:8080/api/category"
         : `${REACT_APP_API_SERVER}/api/category`;
-
+    */
+    const qry = "https://cs6440-drugabuse-api.herokuapp.com/api/category";
     let response = await fetch(qry);
     let data = await response.json();
 
@@ -87,11 +89,13 @@ export function GroupPage() {
 
   async function getMyGroups(userId) {
     //console.log("--------------- patient:", patientId, " ----------------------");
+    /*
     const qry =
       typeof REACT_APP_API_SERVER == "undefined"
         ? `http://localhost:8080/api/user-profile/${userId}`
         : `${REACT_APP_API_SERVER}/api/user-profile/${userId}`;
-
+    */
+    const qry = `https://cs6440-drugabuse-api.herokuapp.com/api/user-profile/${userId}`;
     let response = await fetch(qry);
     let data = await response.json();
 
@@ -122,10 +126,13 @@ export function GroupPage() {
 
     const categoryId = event.target.name.split('-')[1];
 
+    /*
     const qry =
       typeof REACT_APP_API_SERVER == "undefined"
         ? `http://localhost:8080/api/chat/${categoryId}`
         : `${REACT_APP_API_SERVER}/api/chat/${categoryId}`;
+    */
+    const qry = `https://cs6440-drugabuse-api.herokuapp.com/api/chat/${categoryId}`;
 
     let response = await fetch(qry);
     let data = await response.json();
