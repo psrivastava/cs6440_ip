@@ -1,18 +1,24 @@
 const { default: Axios } = require("axios");
 // https://medium.com/@adostes/using-environment-variables-in-a-react-application-ac3b6c307373
 
-const { REACT_APP_API_SERVER } = process.env;
-
 export const fakeAuth = {
-    isAuthenticated: false,
+    isAuthenticated: (localStorage.getItem("userId") != null),
+
     authenticate(email, pwd, cb) {
 
-      const url = (typeof REACT_APP_API_SERVER == "undefined")?"http://localhost:8080/login":
-          `${REACT_APP_API_SERVER}/login`
+      if (localStorage.getItem("userId") != null) {
+        fakeAuth.isAuthenticated = true;
+        cb();
+        return;
+      }
+
+      const API_HOST = process.env.REACT_APP_API_SERVER || 'http://localhost:8080';
+      const url = `${API_HOST}/login`;
       const auth = {
         username: email,
         password: pwd
       };
+
 
       Axios.get(url, { auth })
       .then(response => {
@@ -32,6 +38,7 @@ export const fakeAuth = {
 
     signout(cb) {
       fakeAuth.isAuthenticated = false;
+      localStorage.clear();
       setTimeout(cb, 100);
     }
   };
