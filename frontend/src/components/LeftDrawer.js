@@ -50,6 +50,48 @@ export default function LeftDrawer() {
     fakeAuth.signout();
   };
 
+  function HealthCareOptions(props) {
+    return (
+      <>
+        <ListItem component={Link} to="/report" key="Report">
+          <ListItemText primary="Report" />
+        </ListItem>
+        <ListItem component={Link} to="/dash" key="Dashboard">
+          <ListItemText primary="Dashboard" />
+        </ListItem>
+        <ListItem component={Link} onClick={logout} key="Signout">
+          <ListItemText primary="Sign Out" />
+        </ListItem>
+      </>
+    );
+  }
+
+  function PatientOptions(props) {
+    return (
+      <>
+        <ListItem component={Link} to="/home" key="Home">
+          <ListItemText primary="Home" />
+        </ListItem>
+        <ListItem component={Link} to="/group" key="Groups">
+          <ListItemText primary="Groups" />
+        </ListItem>
+        <ListItem component={Link} to="/dash" key="Dashboard">
+          <ListItemText primary="Dashboard" />
+        </ListItem>
+        <ListItem component={Link} onClick={logout} key="Signout">
+          <ListItemText primary="Sign Out" />
+        </ListItem>
+      </>
+    );
+  }
+
+  function MenuItems(props) {
+    if (props.isHealthcare == true) {
+      return <HealthCareOptions />;
+    }
+    return <PatientOptions />;
+  }
+
   return (
     <div>
       <Drawer
@@ -63,21 +105,7 @@ export default function LeftDrawer() {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          <ListItem component={Link} to="/home" key="Home">
-            <ListItemText primary="Home" />
-          </ListItem>
-          <ListItem component={Link} to="/group" key="Groups">
-            <ListItemText primary="Groups" />
-          </ListItem>
-          <ListItem component={Link} to="/report" key="Report" hidden={isHealthcare}>
-            <ListItemText primary="Report" />
-          </ListItem>
-          <ListItem component={Link} to="/dash" key="Dashboard">
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem component={Link} onClick={logout} key="Signout">
-            <ListItemText primary="Sign Out" />
-          </ListItem>
+          <MenuItems isHealthcare={isHealthcare} />
         </List>
         <Divider />
       </Drawer>
