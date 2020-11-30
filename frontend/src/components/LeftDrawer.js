@@ -74,6 +74,8 @@ export default function LeftDrawer() {
         </ListItem>
         <ListItem component={Link} to="/group" key="Groups">
           <ListItemText primary="Groups" />
+        </ListItem><ListItem component={Link} to="/report" key="Report">
+          <ListItemText primary="Report" />
         </ListItem>
         <ListItem component={Link} to="/dash" key="Dashboard">
           <ListItemText primary="Dashboard" />

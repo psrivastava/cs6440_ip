@@ -284,9 +284,9 @@ export function ReportPage() {
       patients.map((p) => {
         return (
           <tr key={p.id}>
-            <td hidden={true}> {p.id} </td> <td> {p.name} </td>{" "}
-            <td> {p.medname} </td>
-            <td> {p.status} </td>
+            <td hidden={true}>{p.id}</td><td>{p.name}</td>{" "}
+            <td>{p.medname}</td>
+            <td>{p.status}</td>
             <td className="opration">
               <Button className="button" onClick={(e) => removeData(p, e)}>
                 {p.buttonText}
@@ -352,9 +352,9 @@ export function ReportPage() {
             <Grid item>
               <table id="employee">
                 <thead>
-                  <tr> {renderHeader()} </tr>
+                  <tr>{renderHeader()}</tr>
                 </thead>
-                <tbody> {renderBody()} </tbody>
+                <tbody>{renderBody()}</tbody>
               </table>
             </Grid>
           </Grid>
