@@ -74,6 +74,67 @@ export function ReportPage() {
     setStopBtnTxt("Cancel");
   };
 
+  function removeObservation(pid, obserId, btnEvt) {
+
+    fetch(`http://hapi.fhir.org/baseR4/Observation/${obserId}?_pretty=true`, {
+      headers: {
+        Accept: "application/fhir+json;q=1.0, application/json+fhir;q=0.9",
+        "Content-Type": "application/fhir+json; charset=UTF-8",
+      },
+      method: "delete",
+    })
+      .then(function (response) {
+        console.log(response.status);
+        return response.json();
+      })
+      .then(function (data) {
+        console.log("Deleted observation:", obserId);
+        patients.find((p) => p.id === pid).buttonText = "Report";
+        setPatients(patients);
+      });
+  }
+
+  function addNewObservation(pid, btnEvt) {
+    var postBody = {
+      resourceType: "Observation",
+      status: "final",
+      code: {
+        coding: [
+          {
+            system: "http://loinc.org",
+            code: "70004-7",
+            display: "Diagnostic study note",
+          },
+        ],
+        text: "Diagnostic study note",
+      },
+      subject: {
+        reference: `Patient/${pid}`,
+      },
+      effectiveDateTime: new Date().toISOString(),
+      issued: new Date().toISOString(),
+      valueString: "HIGH_RISK",
+    };
+
+    fetch("http://hapi.fhir.org/baseR4/Observation?_format=json&_pretty=true", {
+      headers: {
+        Accept: "application/fhir+json;q=1.0, application/json+fhir;q=0.9",
+        "Content-Type": "application/fhir+json; charset=UTF-8",
+      },
+      method: "post",
+      body: JSON.stringify(postBody),
+    })
+      .then(function (response) {
+        console.log(response.status);
+        return response.json();
+      })
+      .then(function (data) {
+        console.log("Created observation:", data.id);
+        patients.find((p) => p.id === pid).buttonText = "-Redact";
+        setPatients(patients);
+      });
+  }
+
   async function getMedicationName(patientId, patientName, patientDOB) {
     //console.log("--------------- patient:", patientId, " ----------------------");
     var medicationQuery = `http://hapi.fhir.org/baseR4/MedicationRequest?_pretty=true&patient=${patientId}&_format=json`;
@@ -117,13 +178,18 @@ export function ReportPage() {
     let buttonText = alreadyReported ? "-Redact" : "Report";
 
     if (highRisk || lowRisk) {
-      patientInfo.push({
+      let pinfo = {
         id: patientId,
         name: patientName,
         medname: highRisk ? `${highrisk_medname}` : `${lowrisk_medname}`,
         status: highRisk ? "HIGH_RISK" : "LOW_RISK",
-        buttonText: buttonText,
-      });
+        buttonText: buttonText
+      };
+
+      if (alreadyReported)
+        pinfo.obserId = obserdata.entry[0].resource.id;
+
+      patientInfo.push(pinfo);
     }
   }
 
@@ -145,7 +211,7 @@ export function ReportPage() {
   }
 
   const getData = async (startUrl) => {
-    if (stopFlag.current == true) return;
+    if (stopFlag.current === true) return;
 
     setSearchBtnTxt(" . . . ");
 
@@ -182,11 +248,15 @@ export function ReportPage() {
     }
   };
 
-  const removeData = (id) => {
-    axios.delete(`${URL}/${id}`).then((res) => {
-      const del = patients.filter((p) => id !== p.id);
-      setPatients(del);
-    });
+  const removeData = (row, btnEvent) => {
+    console.log(row);
+    if (row.buttonText === "Report") {
+      // add
+      addNewObservation(row.id, btnEvent)
+    } else {
+      // remove
+      removeObservation(row.id, row.obserId, btnEvent);
+    }
   };
 
   const renderHeader = () => {
@@ -218,7 +288,7 @@ export function ReportPage() {
             <td> {p.medname} </td>
             <td> {p.status} </td>
             <td className="opration">
-              <Button className="button" onClick={() => removeData("1")}>
+              <Button className="button" onClick={(e) => removeData(p, e)}>
                 {p.buttonText}
               </Button>
             </td>

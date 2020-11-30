@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 export function LoginPage() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [isHealthcare, setHealthcare] = React.useState(false);
 
   const classes = useStyles();
   const history = useHistory();
@@ -48,7 +49,7 @@ export function LoginPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fakeAuth.authenticate(email, password, () => {
+    fakeAuth.authenticate(email, password, isHealthcare, () => {
       history.push('/home');
     });
   };
@@ -89,7 +90,7 @@ export function LoginPage() {
             autoComplete="current-password"
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={<Checkbox value="yes" color="primary" checked={isHealthcare === "yes"} onChange={(e) => setHealthcare(e.target.value)}/>}
             label="Health care provider ?"
           />
           <Button

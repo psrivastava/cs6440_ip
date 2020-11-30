@@ -17,25 +17,17 @@ INSERT into USER(USER_ID,ADDRESS_LINE1,ADDRESS_LINE2,CITY,COUNTRY,DATE_OF_BIRTH,
 
 
 INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME, CATEGORY_DESC)
- VALUES (1,'nature','activities related to outdoor nature');
+ VALUES (1,'intervention','activities related to outdoor nature');
 INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME,CATEGORY_DESC)
  VALUES (2,'volunteering','activities or events related to volunteering');
 INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME,CATEGORY_DESC)
- VALUES (3,'legal','activities related to legal work');
+ VALUES (3,'group therapy','activities related to legal work');
 INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME,CATEGORY_DESC)
- VALUES (4,'civic engagement','activities related to civic engagement');
+ VALUES (4,'talk session','activities related to civic engagement');
 INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME,CATEGORY_DESC)
  VALUES (5,'exercise','activities related to exercise');
 INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME,CATEGORY_DESC)
- VALUES (6,'food','food related events or activities');
-INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME,CATEGORY_DESC)
- VALUES (7,'entertainment','entertainment related events or activities');
-INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME,CATEGORY_DESC)
- VALUES (8,'child accessible','events or activities that are child friendly');
-INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME,CATEGORY_DESC)
- VALUES (9,'elderly accessible','events or activities that are elderly friendly');
-INSERT INTO CATEGORY(CATEGORY_ID,CATEGORY_NAME,CATEGORY_DESC)
- VALUES (10,'handicap accessible','events or activities that are ADA handicap accessible');
+ VALUES (6,'yoga','food related events or activities');
 
 insert into USER_CATEGORY(USER_ID,CATEGORY_ID)
  values(1,1);
@@ -46,7 +38,7 @@ insert into USER_CATEGORY(USER_ID,CATEGORY_ID)
  insert into USER_CATEGORY(USER_ID,CATEGORY_ID)
  values(34,5);
  insert into USER_CATEGORY(USER_ID,CATEGORY_ID)
- values(34,10);
+ values(34,6);
 
 insert into CHAT(CHAT_ID, CATEGORY, MESSAGE)
  values (1, 1, 'Brandon<$>Hi guys !!');

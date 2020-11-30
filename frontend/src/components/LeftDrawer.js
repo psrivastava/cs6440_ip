@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,7 +9,8 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { fakeAuth } from "../app/auth";
 
 const drawerWidth = 240;
 
@@ -39,6 +40,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function LeftDrawer() {
   const classes = useStyles();
+  let isHealthcare = useRef(false);
+
+  React.useEffect(() => {
+    isHealthcare = (localStorage.getItem("isHealthcare") === "yes");
+  });
+
+  const logout = () => {
+    fakeAuth.signout();
+  };
 
   return (
     <div>
@@ -59,13 +69,13 @@ export default function LeftDrawer() {
           <ListItem component={Link} to="/group" key="Groups">
             <ListItemText primary="Groups" />
           </ListItem>
-          <ListItem component={Link} to="/report" key="Report">
+          <ListItem component={Link} to="/report" key="Report" hidden={isHealthcare}>
             <ListItemText primary="Report" />
           </ListItem>
           <ListItem component={Link} to="/dash" key="Dashboard">
             <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem component={Link} to="/signout" key="Signout">
+          <ListItem component={Link} onClick={logout} key="Signout">
             <ListItemText primary="Sign Out" />
           </ListItem>
         </List>

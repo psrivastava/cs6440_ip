@@ -37,7 +37,8 @@ const myStyles = makeStyles((theme) => ({
     width: "100%",
     textAlign: 'left',
     justifyContent: 'center',
-    alignContent: 'center'
+    alignContent: 'center',
+    padding: '5px'
   },
 }));
 
@@ -54,16 +55,15 @@ export function GroupPage() {
   ]);
   */
   const [currentGroup, setCurrentGroup] = React.useState("1");
+  let [input, setInput] = React.useState("");
 
   async function getGroups(patientId) {
     //console.log("--------------- patient:", patientId, " ----------------------");
-    /*
     const qry =
       typeof REACT_APP_API_SERVER == "undefined"
         ? "http://localhost:8080/api/category"
         : `${REACT_APP_API_SERVER}/api/category`;
-    */
-    const qry = "https://cs6440-drugabuse-api.herokuapp.com/api/category";
+    //const qry = "https://cs6440-drugabuse-api.herokuapp.com/api/category";
     let response = await fetch(qry);
     let data = await response.json();
 
@@ -72,7 +72,7 @@ export function GroupPage() {
     let data_names = [];
 
     data.forEach((stat) => {
-      if(myGroups.some(mg => mg.categoryId == stat.categoryId)){
+      if(myGroups.some(mg => mg.categoryId === stat.categoryId)){
         console.log('checked ' + stat.categoryId);
         stat.checked = true;
       } else{
@@ -88,13 +88,11 @@ export function GroupPage() {
 
   async function getMyGroups(userId) {
     //console.log("--------------- patient:", patientId, " ----------------------");
-    /*
     const qry =
       typeof REACT_APP_API_SERVER == "undefined"
         ? `http://localhost:8080/api/user-profile/${userId}`
         : `${REACT_APP_API_SERVER}/api/user-profile/${userId}`;
-    */
-    const qry = `https://cs6440-drugabuse-api.herokuapp.com/api/user-profile/${userId}`;
+    //const qry = `https://cs6440-drugabuse-api.herokuapp.com/api/user-profile/${userId}`;
     let response = await fetch(qry);
     let data = await response.json();
 
@@ -148,6 +146,33 @@ export function GroupPage() {
   };
 
   const handleSend = (event) => {
+    event.preventDefault();
+
+    messages.push(["Me", input]);
+    setMessages(messages);
+
+    const data = {
+      "category": currentGroup,
+      "message": `Me<$>${input}`
+    };
+
+    input = "";
+    setInput(input);
+    const qry = "https://cs6440-drugabuse-api.herokuapp.com/api/chat";
+    fetch(qry, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 
   };
 
@@ -187,10 +212,11 @@ export function GroupPage() {
               <FormGroup column="true">
                 {groupNames.map((g, idx) => {
                   return (
-                    <FormControlLabel name="allgroups"
+                    <FormControlLabel name={'lbl'+g.name} key={'lbl'+g.name}
                       control={
                         <Checkbox
                           key={g.name}
+                          value="yes"
                           checked={g.checked}
                           onChange={handleChangeAll.bind(this, idx)}
                           name={g.name}
@@ -245,7 +271,7 @@ export function GroupPage() {
                 >
                   <input
                     id="m"
-                    //onChange={(e) => setInput(e.target.value.trim())}
+                    onChange={(e) => setInput(e.target.value.trim())}
                   />
                   <button style={{ width: "75px" }} type="submit">
                     Send

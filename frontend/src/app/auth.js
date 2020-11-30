@@ -4,7 +4,7 @@ const { default: Axios } = require("axios");
 export const fakeAuth = {
     isAuthenticated: (localStorage.getItem("userId") != null),
 
-    authenticate(email, pwd, cb) {
+    authenticate(email, pwd, isHealthcare, cb) {
 
       if (localStorage.getItem("userId") != null) {
         fakeAuth.isAuthenticated = true;
@@ -12,11 +12,9 @@ export const fakeAuth = {
         return;
       }
 
-      /*
       const API_HOST = process.env.REACT_APP_API_SERVER || 'http://localhost:8080';
       const url = `${API_HOST}/login`;
-      */
-      const url = "https://cs6440-drugabuse-api.herokuapp.com/login";
+      //const url = "https://cs6440-drugabuse-api.herokuapp.com/login";
       const auth = {
         username: email,
         password: pwd
@@ -28,6 +26,7 @@ export const fakeAuth = {
         console.log(response);
 
         fakeAuth.isAuthenticated = true;
+        localStorage.setItem("isHealthcare", isHealthcare);
         console.log("authenticated !!");
         localStorage.setItem("patientId", "1200");
         localStorage.setItem("userId", "1");
